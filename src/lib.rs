@@ -1,4 +1,13 @@
+pub mod draft;
 pub mod app;
+pub mod entity;
+pub mod api;
+
+#[cfg(feature = "ssr")]
+#[derive(Debug, Clone)]
+pub struct AppState {
+    pub db: sea_orm::DatabaseConnection
+}
 
 #[cfg(feature = "hydrate")]
 #[wasm_bindgen::prelude::wasm_bindgen]
