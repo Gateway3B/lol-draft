@@ -1,0 +1,5 @@
+end2end/
+node_modules/
+target/
+deploy/
+lol-draft.tar

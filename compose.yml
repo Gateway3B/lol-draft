@@ -1,0 +1,11 @@
+services:
+  web:
+    image: lol-draft
+    ports:
+      - 1006:80
+    environment:
+      - DATABASE_URL=sqlite://./lol-draft.db?mode=rwc
+    volumes:
+      - type: bind
+        source: ./lol-draft.db
+        target: /app/lol-draft.db

@@ -1,5 +1,6 @@
 
 use cfg_if::cfg_if;
+use tokio_cron_scheduler::{Job, JobScheduler};
 
 cfg_if! { if #[cfg(feature = "ssr")] {
     use axum::Router;
@@ -10,6 +11,7 @@ cfg_if! { if #[cfg(feature = "ssr")] {
     use dotenv::dotenv;
     use std::env;
     use lol_draft::{app::*, AppState};
+    use leptos_ws::server_signals::ServerSignals;
 
     #[tokio::main]
     async fn main() {
@@ -28,15 +30,25 @@ cfg_if! { if #[cfg(feature = "ssr")] {
         // Generate the list of routes in your Leptos App
         let routes = generate_route_list(App);
 
+        let server_signals = ServerSignals::new();
+
         let app_state = AppState {
-            db: db.clone()
-        };            
+            db: db.clone(),
+            server_signals: server_signals.clone(),
+        };
 
         let app = Router::new()
+            .route(
+                "/ws",
+                axum::routing::get(leptos_ws::axum::websocket(app_state.server_signals.clone())),
+            )
             .leptos_routes_with_context(
                 &leptos_options,
                 routes,
-                move || provide_context(app_state.clone()),
+                move || {
+                    provide_context(app_state.clone());
+                    provide_context(app_state.server_signals.clone());
+                },
                 {
                     let leptos_options = leptos_options.clone();
                     move || shell(leptos_options.clone())
@@ -44,6 +56,21 @@ cfg_if! { if #[cfg(feature = "ssr")] {
             )
             .fallback(leptos_axum::file_and_error_handler(shell))
             .with_state(leptos_options);
+
+        tokio::spawn(async move {
+            let addr = addr.clone();
+            let scheduler = JobScheduler::new().await.unwrap();
+            scheduler.add(
+                Job::new_async("0 0 0 * * *", move |_uuid, mut _l| {
+                    Box::pin(async move {
+                        reqwest::Client::new().post(&format!("http://{}/update_champions", addr.clone())).send().await.unwrap();
+                        log!("Champions Updated");
+                    })
+                }).unwrap()
+            ).await.unwrap();
+
+            scheduler.start().await.unwrap();
+        });
 
         // run our app with hyper
         // `axum::Server` is a re-export of `hyper::Server`

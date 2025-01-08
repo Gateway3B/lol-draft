@@ -2,7 +2,9 @@
     "scripts": {
         "install:all": "cargo install trunk && rustup target add wasm32-unknown-unknown && cargo install cargo-leptos && ",
         "run": "cargo leptos watch",
-        "seaorm:create-migration": "sea-orm-cli migrate --"
+        "seaorm:create-migration": "sea-orm-cli migrate --",
+        "build": "docker build . -t lol-draft",
+        "deploy": ".\\deploy\\deploy.bat"
     },
     "devDependencies": {
         "tailwindcss": "^3.4.10"
