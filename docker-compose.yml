@@ -1,6 +1,7 @@
 services:
   web:
-    image: lol-draft
+    name: lol-draft
+    image: hl-docker-registry.g3tech.net/lol-draft:latest
     ports:
       - 1006:80
     environment:
