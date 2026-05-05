@@ -78,7 +78,6 @@ nightly = ["thaw/nightly"]
 [profile.wasm-release]
 inherits = "release"
 opt-level = 'z'
-lto = true
 codegen-units = 1
 panic = "abort"
 
@@ -145,3 +144,6 @@ lib-default-features = false
 #
 # Optional. Defaults to "release".
 lib-profile-release = "wasm-release"
+
+# Disable wasm-opt post-processing to avoid duplicate export name errors
+wasm-opt = false
