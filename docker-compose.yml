@@ -6,4 +6,4 @@ services:
     environment:
       - DATABASE_URL=sqlite://./lol-draft.db?mode=rwc
     volumes:
-      - ./lol-draft.db:/app/lol-draft.db
+      - ${APP_BASE}/lol-draft.db:/app/lol-draft.db
