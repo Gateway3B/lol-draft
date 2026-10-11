@@ -21,7 +21,7 @@ WORKDIR /build
 COPY . .
 
 # Build the app
-RUN cargo leptos build --release -vv
+RUN cargo leptos build --release --locked -vv
 
 # Move to app folder
 WORKDIR /app
