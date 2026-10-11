@@ -43,7 +43,7 @@ pub fn App() -> impl IntoView {
         // sets the document title
         <Title text="Lol Draft"/>
 
-        <a href="https://g3tech.net" target="_blank">
+        <a href="https://gateway3.net" target="_blank">
             <video
                 style:cursor="pointer"
                 class="absolute right-0 bottom-0 w-10 rounded"

@@ -11,7 +11,8 @@ RUN cp cargo-binstall /usr/local/cargo/bin
 RUN cargo binstall cargo-leptos -y
 
 # Add the WASM target
-RUN rustup target add wasm32-unknown-unknown
+RUN rustup toolchain install nightly --profile minimal --target wasm32-unknown-unknown \
+    && rustup default nightly
 
 # Make an /app dir, which everything will eventually live in
 RUN mkdir -p /build

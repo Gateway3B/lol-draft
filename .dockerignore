@@ -3,3 +3,7 @@ node_modules/
 target/
 deploy/
 lol-draft.tar
+.git/
+.github/
+.env
+.env.*
