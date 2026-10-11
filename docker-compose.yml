@@ -1,7 +1,8 @@
 services:
   web:
     container_name: lol-draft
-    image: hl-docker-registry.g3tech.net/lol-draft:latest
+    image: ghcr.io/gateway3b/lol-draft:latest
+    pull_policy: always
     ports:
       - 1006:80
     environment:
